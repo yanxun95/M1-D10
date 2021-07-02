@@ -145,14 +145,15 @@
             // If you are presenting all questions together, just take all the radio buttons and check if the selected answer === correct_answer
             // If you are presenting one question at a time, just add one point or not to the user score if the selected answer === correct_answer
         
-            let currentQuiz = 1;
+            let currentQuiz = 0;
             let correctAnswer = 0;
             const createQuiz = function(currentQuiz){
+                
                 let mainQuizContainerNode = document.getElementById("quiz-container");
                 let quizContainerNode = document.createElement("div");
                 mainQuizContainerNode.appendChild(quizContainerNode);
-                let quizQuestion = `${currentQuiz}: ` +questions[currentQuiz-1].question;
-                questions[currentQuiz-1].incorrect_answers.push(questions[currentQuiz-1].correct_answer);
+                let quizQuestion = `${currentQuiz+1}: ` +questions[currentQuiz].question;
+                questions[currentQuiz].incorrect_answers.push(questions[currentQuiz].correct_answer);
                 
                 let newQuiz = document.createElement("p");
                 newQuiz.innerHTML = quizQuestion;
@@ -165,7 +166,7 @@
                 let nextBtn = document.createElement("button")
                 quizContainerNode.appendChild(formGroup)
 
-                for(let answer of questions[currentQuiz-1].incorrect_answers){
+                for(let answer of questions[currentQuiz].incorrect_answers){
                     ansQuiz = document.createElement("input");
                     ansQuiz.setAttribute("type", "radio");
                     ansQuiz.setAttribute("value",answer);
@@ -195,7 +196,8 @@
             const next = function(){
                 let removeDiv = document.getElementsByTagName('div')[1];
                 checkAnswer();
-                if(currentQuiz <= questions.length){
+                currentQuiz++;
+                if(currentQuiz < questions.length){
                     removeDiv.remove();
                     createQuiz(currentQuiz);
                 }
@@ -203,10 +205,8 @@
 
             const checkAnswer = function(){
                 console.log("current quiz:", currentQuiz)
-                console.log("quesiton length:", questions.length)
-                if(currentQuiz <= questions.length){
+                if(currentQuiz < questions.length){
                     let ele = document.getElementsByName("quiz");
-                    let removeDiv = document.getElementsByTagName('div')[1];
                     for(let i = 0; i < ele.length; i++){
                         if(ele[i].checked){
                             let answer = questions[currentQuiz-1].correct_answer;
@@ -218,7 +218,6 @@
                             //alert("Please select an answer.");
                         }
                     }
-                    currentQuiz++;
                 }else{
                     result(correctAnswer);
                     console.log("finish");
