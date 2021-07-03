@@ -148,7 +148,6 @@
             let currentQuiz = 0;
             let correctAnswer = 0;
             const createQuiz = function(currentQuiz){
-                
                 let mainQuizContainerNode = document.getElementById("quiz-container");
                 let quizContainerNode = document.createElement("div");
                 mainQuizContainerNode.appendChild(quizContainerNode);
@@ -195,17 +194,19 @@
 
             const next = function(){
                 let removeDiv = document.getElementsByTagName('div')[1];
-                checkAnswer();
                 currentQuiz++;
+                checkAnswer();
                 if(currentQuiz < questions.length){
                     removeDiv.remove();
                     createQuiz(currentQuiz);
+                }else{
+                    removeDiv.remove();
                 }
             }
 
             const checkAnswer = function(){
                 console.log("current quiz:", currentQuiz)
-                if(currentQuiz < questions.length){
+                if(currentQuiz <= questions.length){
                     let ele = document.getElementsByName("quiz");
                     for(let i = 0; i < ele.length; i++){
                         if(ele[i].checked){
@@ -218,9 +219,10 @@
                             //alert("Please select an answer.");
                         }
                     }
-                }else{
-                    result(correctAnswer);
-                    console.log("finish");
+                    if(currentQuiz === questions.length){
+                        result(correctAnswer);
+                        console.log("finish");
+                    }
                 }
             }
             
