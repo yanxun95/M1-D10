@@ -31,7 +31,7 @@
     --><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252"><script data-dapp-detection="">!function(){let e=!1;function n(){if(!e){const n=document.createElement("meta");n.name="dapp-detected",document.head.appendChild(n),e=!0}}if(window.hasOwnProperty("ethereum")){if(window.__disableDappDetectionInsertion=!0,void 0===window.ethereum)return;n()}else{var t=window.ethereum;Object.defineProperty(window,"ethereum",{configurable:!0,enumerable:!1,set:function(e){window.__disableDappDetectionInsertion||n(),t=e},get:function(){if(!window.__disableDappDetectionInsertion){const e=arguments.callee;e&&e.caller&&e.caller.toString&&-1!==e.caller.toString().indexOf("getOwnPropertyNames")||n()}return t}})}}();</script></head>
   <body>
     <script>
-        var questions = [
+        var totalQuestions = [
             {
                 category: "Science: Computers",
                 type: "multiple",
@@ -145,6 +145,7 @@
             // If you are presenting all questions together, just take all the radio buttons and check if the selected answer === correct_answer
             // If you are presenting one question at a time, just add one point or not to the user score if the selected answer === correct_answer
         
+            let questions = [];
             let currentQuiz = 0;
             let correctAnswer = 0;
             const createQuiz = function(currentQuiz){
@@ -187,9 +188,17 @@
             }
 
             const startTheQuiz = function(){
-                createQuiz(currentQuiz);
-                let btn = document.getElementById("startBtn")
-                btn.remove();
+                let quiz = document.getElementById("totalQuiz").value; 
+                if(quiz > totalQuestions.length){
+                    alert("The maximun question is " + `${quiz}`)
+                }else{
+                    for(let i = 0; i < quiz; i++){
+                        questions.push(totalQuestions[i])
+                    }
+                    let askUserQuiz = document.getElementById("askUserQuiz");
+                    askUserQuiz.remove();
+                    createQuiz(currentQuiz);
+                }
             }
 
             const next = function(){
@@ -205,7 +214,6 @@
             }
 
             const checkAnswer = function(){
-                console.log("current quiz:", currentQuiz)
                 if(currentQuiz <= questions.length){
                     let ele = document.getElementsByName("quiz");
                     for(let i = 0; i < ele.length; i++){
@@ -214,6 +222,8 @@
                             if(ele[i].value === answer){
                                 correctAnswer++;
                                 console.log(correctAnswer)
+                            }else{
+                                alert("The correct answer is: " + answer);
                             }
                         }else{
                             //alert("Please select an answer.");
@@ -239,7 +249,12 @@
     </script>
 
     <h1>QUIZ GAME!</h1>
-    <button id = "startBtn" onclick = "startTheQuiz()">Quiz start</button>
+    <div id = "askUserQuiz">
+        <label for="totalQuiz">How many quiz do you want to take?</label>
+        <input type="number" id="totalQuiz" name="totalQuiz" ><br><br>
+        <button id = "startBtn" onclick = "startTheQuiz()">Quiz start</button>
+    </div>
+
     <div id="quiz-container">
 
     </div>
